@@ -6,26 +6,27 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
-import { MouseEventHandler } from "react";
 
 type ListItemType = {
-  value: string;
-  isChecked: boolean;
+  title: string;
+  date: string;
+  isChecked?: boolean;
 };
 
 interface TaskListProps {
   list: ListItemType[];
-  handleToggle: MouseEventHandler<HTMLDivElement>;
+  // handleToggle: MouseEventHandler<HTMLDivElement>;
 }
 
-export const TaskList = ({ list, handleToggle }: TaskListProps) => {
+export const TaskList = ({ list }: TaskListProps) => {
+  const handleToggle = () => {};
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      {list.map(({ isChecked, value }: ListItemType) => {
-        const labelId = `checkbox-list-label-${value}`;
+      {list.map(({ isChecked, title }: ListItemType) => {
+        const labelId = `checkbox-list-label-${title}`;
 
         return (
-          <ListItem key={value} disablePadding>
+          <ListItem key={title} disablePadding>
             <ListItemButton role={undefined} onClick={handleToggle} dense>
               <ListItemIcon>
                 <Checkbox
@@ -36,7 +37,7 @@ export const TaskList = ({ list, handleToggle }: TaskListProps) => {
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value} />
+              <ListItemText id={labelId} primary={title} />
             </ListItemButton>
           </ListItem>
         );

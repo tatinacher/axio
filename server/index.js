@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-let tasks = [];
+let tasks = [{ date: '06.12.2024', title: 'Get a dog' }];
 let currentId = 1;
 
 app.get('/tasks', (req, res) => {
