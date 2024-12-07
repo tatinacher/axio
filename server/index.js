@@ -50,6 +50,7 @@ app.post('/task-toggle/:id', (req, res) => {
 
     tasks = tasks.filter(task => task.id !== id);
     tasks = [...tasks, { ...taskToggle, completed: !taskToggle.completed }];
+    tasks = tasks.sort((a, b) => a.id - b.id)
     res.status(201).send();
 });
 

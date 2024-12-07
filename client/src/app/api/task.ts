@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import axiosInstance from "@/utils/request";
 
 export const getTasks = async (date: string) => {
@@ -7,10 +6,8 @@ export const getTasks = async (date: string) => {
       params: { date },
     });
     return response.data || [];
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error("Error getting tasks:", err.message);
-    return [];
+  } catch {
+    throw new Error("Failed to get tasks");
   }
 };
 
@@ -21,10 +18,8 @@ export const addTasks = async (date: string, title: string) => {
       title,
     });
     return response.data || [];
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error("Error posting task:", err.message);
-    return [];
+  } catch {
+    throw new Error("Failed to add task");
   }
 };
 
@@ -32,10 +27,8 @@ export const getCalendarTasks = async () => {
   try {
     const response = await axiosInstance.get("/calendar");
     return response.data || [];
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error("Error posting task:", err.message);
-    return [];
+  } catch {
+    throw new Error("Failed to fetch calendar tasks");
   }
 };
 
@@ -43,10 +36,8 @@ export const updateTask = async (id: number) => {
   try {
     const response = await axiosInstance.post(`/task-toggle/${id}`);
     return response.data || [];
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error("Error posting task:", err.message);
-    return [];
+  } catch {
+    throw new Error("Failed to update task");
   }
 };
 
@@ -54,9 +45,7 @@ export const deleteTask = async (id: number) => {
   try {
     const response = await axiosInstance.delete(`/tasks/${id}`);
     return response.data || [];
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error("Error posting task:", err.message);
-    return [];
+  } catch {
+    throw new Error("Failed to delete task");
   }
 };

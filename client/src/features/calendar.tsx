@@ -1,7 +1,5 @@
 "use client";
 import { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { CalendarTaskDates, DateType } from "@/utils/types";
 import {
@@ -9,7 +7,7 @@ import {
   PickersDayProps,
 } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import Badge from "@mui/material/Badge";
-import { dateFormat } from "@/utils/constants";
+import { DATE_FORMAT } from "@/utils/constants";
 
 interface CalendarProps {
   date: DateType;
@@ -24,7 +22,7 @@ const TaskDay = (
   let count = 0;
   if (typeof taskDates === "object" && !Array.isArray(taskDates)) {
     const dayOfCalendar = props.day.format(
-      dateFormat
+      DATE_FORMAT
     ) as keyof CalendarTaskDates;
     count = taskDates[dayOfCalendar] || 0;
   }
@@ -45,19 +43,17 @@ const TaskDay = (
 
 export const Calendar = ({ date, onChange, taskDates }: CalendarProps) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateCalendar
-        value={date}
-        onChange={onChange}
-        slots={{
-          day: TaskDay,
-        }}
-        slotProps={{
-          day: {
-            taskDates,
-          } as any,
-        }}
-      />
-    </LocalizationProvider>
+    <DateCalendar
+      value={date}
+      onChange={onChange}
+      slots={{
+        day: TaskDay,
+      }}
+      slotProps={{
+        day: {
+          taskDates,
+        } as any,
+      }}
+    />
   );
 };
