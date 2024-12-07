@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-let tasks = [{ date: '06.12.2024', title: 'Get a dog' }];
+let tasks = [];
 let currentId = 1;
 
 app.get('/tasks', (req, res) => {
@@ -24,11 +24,11 @@ app.get('/tasks', (req, res) => {
 });
 
 app.post('/tasks', (req, res) => {
-    const { title, date } = req.body;
+    const { title, date, completed } = req.body;
     if (!title || !date) {
         return res.status(400).json({ message: 'Поля "title" и "date" обязательны' });
     }
-    const newTask = { id: currentId++, title, date, completed: false };
+    const newTask = { id: currentId++, title, date, completed: completed || false };
     tasks.push(newTask);
     res.status(201).json(newTask);
 });
