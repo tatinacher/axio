@@ -49,3 +49,14 @@ export const updateTask = async (id: number) => {
     return [];
   }
 };
+
+export const deleteTask = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/tasks/${id}`);
+    return response.data || [];
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error("Error posting task:", err.message);
+    return [];
+  }
+};

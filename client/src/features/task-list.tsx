@@ -13,9 +13,14 @@ import { ListItemType } from "@/utils/types";
 interface TaskListProps {
   list: ListItemType[];
   onTaskClick: MouseEventHandler<HTMLDivElement>;
+  onTaskDelete: MouseEventHandler<HTMLDivElement>;
 }
 
-export const TaskList = ({ list, onTaskClick }: TaskListProps) => {
+export const TaskList = ({
+  list,
+  onTaskClick,
+  onTaskDelete,
+}: TaskListProps) => {
   if (!list.length) {
     <div>No tasks for the selected date</div>;
   }
@@ -32,7 +37,7 @@ export const TaskList = ({ list, onTaskClick }: TaskListProps) => {
             <ListItemButton
               role={undefined}
               onClick={onTaskClick}
-              data-id={id}
+              data-toggle-id={id}
               dense
             >
               <ListItemIcon>
@@ -48,7 +53,11 @@ export const TaskList = ({ list, onTaskClick }: TaskListProps) => {
               </ListItemIcon>
               <ListItemText id={`checkbox-list-label-${id}`} primary={title} />
             </ListItemButton>
-            <ListItemButton sx={{ maxWidth: "60px" }}>
+            <ListItemButton
+              sx={{ maxWidth: "60px" }}
+              data-delete-id={id}
+              onClick={onTaskDelete}
+            >
               <ListItemIcon>
                 <DeleteIcon />
               </ListItemIcon>

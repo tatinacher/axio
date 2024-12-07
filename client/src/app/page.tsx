@@ -6,15 +6,23 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from "./page.module.css";
 import { Calendar, TaskAddForm, TaskList } from "../features";
-import { addTasks, getTasks, getCalendarTasks, updateTask } from "./api/task";
-import { DateType } from "@/utils/types";
+import {
+  addTasks,
+  getTasks,
+  getCalendarTasks,
+  updateTask,
+  deleteTask,
+} from "./api/task";
+import { DateType, ListItemType } from "@/utils/types";
 import { dateFormat } from "@/utils/constants";
+import { Box } from "@mui/material";
 
 export default function Home() {
   const [date, setDate] = useState(dayjs());
   const [calendarTasks, setCalendarTasks] = useState({});
   const [taskList, setTaskList] = useState([]);
   const [taskNewValue, setTaskNewValue] = useState("");
+
   const [isCalendarLoading, setCalendarLoading] = useState<boolean>(false);
   const [isTasksLoading, setTasksLoading] = useState<boolean>(false);
 
@@ -38,7 +46,7 @@ export default function Home() {
       setCalendarLoading(false);
     };
     loadData();
-  }, []);
+  }, [taskList]);
 
   const onKeyDown = async (value: React.KeyboardEvent<HTMLInputElement>) => {
     if (value.key === "Enter") {
@@ -51,7 +59,7 @@ export default function Home() {
 
   const onTaskClick = async (event: React.MouseEvent<HTMLElement>) => {
     const target = event.currentTarget as HTMLElement;
-    const id = parseInt(target.getAttribute("data-id") as string);
+    const id = parseInt(target.getAttribute("data-toggle-id") as string);
 
     if (id) {
       await updateTask(id);
@@ -60,18 +68,39 @@ export default function Home() {
     }
   };
 
+  const onTaskDelete = async (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.currentTarget as HTMLElement;
+    const id = parseInt(target.getAttribute("data-delete-id") as string);
+
+    if (id) {
+      await deleteTask(id);
+      const fetchedData = await getTasks(date.format(dateFormat));
+      setTaskList(fetchedData);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        {isCalendarLoading ? (
-          <CircularProgress />
-        ) : (
-          <Calendar
-            date={date}
-            onChange={(newValue: DateType) => setDate(newValue)}
-            taskDates={calendarTasks}
-          />
-        )}
+        <Box
+          sx={{
+            height: "400px",
+            width: "500px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {isCalendarLoading ? (
+            <CircularProgress />
+          ) : (
+            <Calendar
+              date={date}
+              onChange={(newValue: DateType) => setDate(newValue)}
+              taskDates={calendarTasks}
+            />
+          )}
+        </Box>
         <TaskAddForm
           value={taskNewValue}
           onChange={(value) => setTaskNewValue(value.currentTarget.value)}
@@ -80,7 +109,11 @@ export default function Home() {
         {isTasksLoading ? (
           <CircularProgress />
         ) : (
-          <TaskList list={taskList} onTaskClick={onTaskClick} />
+          <TaskList
+            list={taskList}
+            onTaskClick={onTaskClick}
+            onTaskDelete={onTaskDelete}
+          />
         )}
       </main>
       <footer className={styles.footer}></footer>
