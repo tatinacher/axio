@@ -24,13 +24,33 @@ app.get('/tasks', (req, res) => {
 });
 
 app.post('/tasks', (req, res) => {
-    const { title, date, completed } = req.body;
+    const { title, date } = req.body;
     if (!title || !date) {
         return res.status(400).json({ message: 'Поля "title" и "date" обязательны' });
     }
-    const newTask = { id: currentId++, title, date, completed: completed || false };
+
+    const newTask = { id: currentId++, title, date, completed: false };
     tasks.push(newTask);
     res.status(201).json(newTask);
+});
+
+app.post('/task-toggle/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const taskToggle = tasks.find(task => task.id == id);
+
+
+    if (!id) {
+        return res.status(400).json({ message: 'Параметр "id" обязателен' });
+    }
+
+    if (!taskToggle) {
+        return res.status(400).json({ message: 'Задача с таким "id" не найдена' });
+    }
+
+
+    tasks = tasks.filter(task => task.id !== id);
+    tasks = [...tasks, { ...taskToggle, completed: !taskToggle.completed }];
+    res.status(201).send();
 });
 
 app.delete('/tasks/:id', (req, res) => {

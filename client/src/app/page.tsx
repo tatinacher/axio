@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from "./page.module.css";
 import { Calendar, TaskAddForm, TaskList } from "../features";
-import { addTasks, getTasks, getCalendarTasks } from "./api/task";
+import { addTasks, getTasks, getCalendarTasks, updateTask } from "./api/task";
 import { DateType } from "@/utils/types";
 import { dateFormat } from "@/utils/constants";
 
@@ -49,6 +49,17 @@ export default function Home() {
     }
   };
 
+  const onTaskClick = async (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.currentTarget as HTMLElement;
+    const id = parseInt(target.getAttribute("data-id") as string);
+
+    if (id) {
+      await updateTask(id);
+      const fetchedData = await getTasks(date.format(dateFormat));
+      setTaskList(fetchedData);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -66,7 +77,11 @@ export default function Home() {
           onChange={(value) => setTaskNewValue(value.currentTarget.value)}
           onKeyDown={onKeyDown}
         />
-        {isTasksLoading ? <CircularProgress /> : <TaskList list={taskList} />}
+        {isTasksLoading ? (
+          <CircularProgress />
+        ) : (
+          <TaskList list={taskList} onTaskClick={onTaskClick} />
+        )}
       </main>
       <footer className={styles.footer}></footer>
     </div>

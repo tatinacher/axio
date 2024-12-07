@@ -38,3 +38,14 @@ export const getCalendarTasks = async () => {
     return [];
   }
 };
+
+export const updateTask = async (id: number) => {
+  try {
+    const response = await axiosInstance.post(`/task-toggle/${id}`);
+    return response.data || [];
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error("Error posting task:", err.message);
+    return [];
+  }
+};
