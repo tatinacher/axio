@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Установка зависимостей
 
-## Getting Started
+В папке client:
 
-First, run the development server:
+```bash
+npm install
+```
+
+## Запуск клиенского приложения
+
+В папке client:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Приложение будет доступно по адресу `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Используемые технологии
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- React
+- Typescript
+- Next.js
+- MUI
+- Dayjs
+- Axios
+- ESLint
+- Prettier
 
-## Learn More
+Для отображения календаря использован `DateCalendar` из `@mui/x-date-pickers`, где в виде бейджа отображается количество задач на указанную дату.
 
-To learn more about Next.js, take a look at the following resources:
+В форме для создания задачи как начальное значение задана дата, выбранная в календаре, дату можно изменить введя нужное значение в `DateField`. В форме реализована валидация формата даты и наличия текста новой задачи.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Список задач меняется при выборе даты в календаре. При нажатии на задачу происходит смена состояния задачи (выполненная/не выполненная). Рядом с каждым элементом из списка отображается кнопка удаления этого элемента, при нажатии происходит удаление элемента из списка.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+При изменении количества задач на день происходит обновление календаря, обновляется значение в бейдже на день.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Для отображения ошибок в виде всплывающих уведомлений использован `Snackbar` из `@mui/material`.
